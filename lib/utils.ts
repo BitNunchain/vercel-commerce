@@ -1,6 +1,6 @@
-import { ReadonlyURLSearchParams } from 'next/navigation';
-import { ResultOf } from 'gql.tada';
 import searchResultFragment from '@/lib/vendure/fragments/search-result';
+import { ResultOf } from 'gql.tada';
+import { ReadonlyURLSearchParams } from 'next/navigation';
 
 export const createUrl = (pathname: string, params: URLSearchParams | ReadonlyURLSearchParams) => {
   const paramsString = params.toString();
@@ -24,7 +24,7 @@ export const validateEnvironmentVariables = () => {
 
   if (missingEnvironmentVariables.length) {
     throw new Error(
-      `The following environment variables are missing. Your site will not work without them. Read more: https://vercel.com/docs/integrations/shopify#configure-environment-variables\n\n${missingEnvironmentVariables.join(
+      `The following environment variables are missing. Your site will not work without them. See README.md for setup instructions.\n\n${missingEnvironmentVariables.join(
         '\n'
       )}\n`
     );

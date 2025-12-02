@@ -53,6 +53,14 @@ Your app should now be running on [localhost:3000](http://localhost:3000/).
 
 - `VENDURE_API_ENDPOINT` – URL of your Vendure Shop API (e.g. Cloud Run URL)
 - `VENDURE_REVALIDATION_SECRET` – secret string used by the revalidation route
+- `VENDURE_INSTANCE` – identifier for your deployment context (e.g. `default`)
+
+#### Cloud Run wiring
+
+- Set `VENDURE_API_ENDPOINT` to your Cloud Run Shop API:
+  `https://vendure-api-572691489926.us-central1.run.app/shop-api`
+- Create a strong `VENDURE_REVALIDATION_SECRET` and add it to Vercel Project → Settings → Environment Variables.
+- If your Vendure instance serves assets from the same host, the domain is already allowed in `next.config.ts`.
 
 ### Useful scripts
 
