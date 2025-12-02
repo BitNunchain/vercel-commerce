@@ -6,7 +6,7 @@ const Price = ({
   currencyCode = 'USD',
   currencyCodeClassName
 }: {
-  amount: string |number;
+  amount: string | number;
   className?: string;
   currencyCode: string;
   currencyCodeClassName?: string;

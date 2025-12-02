@@ -1,8 +1,32 @@
-import { TAGS } from 'lib/constants';
+import { readFragment } from '@/gql/graphql';
+import activeChannelFragment from '@/lib/vendure/fragments/active-channel';
+import orderFragment from '@/lib/vendure/fragments/order';
+import productFragment from '@/lib/vendure/fragments/product';
+import { authenticate } from '@/lib/vendure/mutations/customer';
+import { updateCustomerMutation } from '@/lib/vendure/mutations/update-customer';
+import {
+  activeCustomerFragment,
+  getActiveCustomerQuery
+} from '@/lib/vendure/queries/active-customer';
+import { getCustomerOrdersQuery, getOrderByCodeQuery } from '@/lib/vendure/queries/customer-orders';
+import { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import { ResultOf, VariablesOf } from 'gql.tada';
+import { DocumentNode, print } from 'graphql';
+import { AUTH_COOKIE_KEY, TAGS } from 'lib/constants';
 import { isVendureError } from 'lib/type-guards';
 import { revalidateTag } from 'next/cache';
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+import activeOrderFragment from './fragments/active-order';
+import { facetFragment, facetValueFragment } from './fragments/facet';
+import searchResultFragment from './fragments/search-result';
+import {
+  addItemToOrder,
+  adjustOrderLineMutation,
+  removeOrderLineMutation
+} from './mutations/active-order';
+import { getActiveChannelQuery } from './queries/active-channel';
+import { getActiveOrderQuery } from './queries/active-order';
 import {
   collectionFragment,
   getCollectionFacetValuesQuery,
@@ -10,36 +34,9 @@ import {
   getCollectionQuery,
   getCollectionsQuery
 } from './queries/collection';
+import { getFacetsQuery } from './queries/facets';
 import { getMenuQuery } from './queries/menu';
 import { getProductQuery, getProductsQuery } from './queries/product';
-import {
-  addItemToOrder,
-  adjustOrderLineMutation,
-  removeOrderLineMutation
-} from './mutations/active-order';
-import { DocumentNode, print } from 'graphql';
-import { getActiveOrderQuery } from './queries/active-order';
-import { getActiveChannelQuery } from './queries/active-channel';
-import { getFacetsQuery } from './queries/facets';
-import { facetFragment, facetValueFragment } from './fragments/facet';
-import activeOrderFragment from './fragments/active-order';
-import searchResultFragment from './fragments/search-result';
-import { authenticate } from '@/lib/vendure/mutations/customer';
-import { updateCustomerMutation } from '@/lib/vendure/mutations/update-customer';
-import { TypedDocumentNode } from '@graphql-typed-document-node/core';
-import {
-  activeCustomerFragment,
-  getActiveCustomerQuery
-} from '@/lib/vendure/queries/active-customer';
-import {
-  getCustomerOrdersQuery,
-  getOrderByCodeQuery
-} from '@/lib/vendure/queries/customer-orders';
-import orderFragment from '@/lib/vendure/fragments/order';
-import { VariablesOf, ResultOf } from 'gql.tada';
-import { readFragment } from '@/gql/graphql';
-import activeChannelFragment from '@/lib/vendure/fragments/active-channel';
-import productFragment from '@/lib/vendure/fragments/product';
 
 const endpoint = process.env.VENDURE_API_ENDPOINT || 'http://localhost:3000/shop-api';
 
@@ -101,7 +98,7 @@ export async function vendureFetch<T, V extends Record<string, any> = Record<str
 }
 
 async function getAuthHeaders() {
-  const tokenValue = (await cookies()).get('vendure-token')?.value;
+  const tokenValue = (await cookies()).get(AUTH_COOKIE_KEY)?.value;
   return tokenValue
     ? {
         Authorization: 'Bearer ' + tokenValue
@@ -111,10 +108,10 @@ async function getAuthHeaders() {
 
 async function updateAuthCookie(headers: Headers) {
   const cookieStore = await cookies();
-  const tokenValue = headers.get('vendure-auth-token');
+  const tokenValue = headers.get(AUTH_COOKIE_KEY);
 
   if (tokenValue && tokenValue != '') {
-    cookieStore.set('vendure-token', tokenValue);
+    cookieStore.set(AUTH_COOKIE_KEY, tokenValue);
   }
 }
 
@@ -181,7 +178,9 @@ export async function getActiveChannel(): Promise<ResultOf<typeof activeChannelF
   return readFragment(activeChannelFragment, res.body.activeChannel);
 }
 
-export async function getCollection(handle: string): Promise<ResultOf<typeof collectionFragment> | null> {
+export async function getCollection(
+  handle: string
+): Promise<ResultOf<typeof collectionFragment> | null> {
   const res = await vendureFetch({
     query: getCollectionQuery,
     tags: [TAGS.collections],
@@ -216,7 +215,7 @@ export async function getCollectionProducts({
     }
   });
 
-  return res.body.search.items.map(item => readFragment(searchResultFragment, item));
+  return res.body.search.items.map((item) => readFragment(searchResultFragment, item));
 }
 
 export async function getCollectionFacetValues({
@@ -239,7 +238,9 @@ export async function getCollectionFacetValues({
     }
   });
 
-  return res.body.search.facetValues.map((item) => readFragment(facetValueFragment, item.facetValue));
+  return res.body.search.facetValues.map((item) =>
+    readFragment(facetValueFragment, item.facetValue)
+  );
 }
 
 export async function getCollections({
@@ -258,7 +259,7 @@ export async function getCollections({
     }
   });
 
-  return res.body.collections.items.map(item => readFragment(collectionFragment, item));
+  return res.body.collections.items.map((item) => readFragment(collectionFragment, item));
 }
 
 export async function getFacets(): Promise<ResultOf<typeof facetFragment>[]> {
@@ -267,7 +268,7 @@ export async function getFacets(): Promise<ResultOf<typeof facetFragment>[]> {
     tags: [TAGS.facets]
   });
 
-  return res.body.facets.items.map(item => readFragment(facetFragment, item));
+  return res.body.facets.items.map((item) => readFragment(facetFragment, item));
 }
 
 export async function getMenu(): Promise<ResultOf<typeof collectionFragment>[]> {
@@ -276,7 +277,7 @@ export async function getMenu(): Promise<ResultOf<typeof collectionFragment>[]> 
     tags: [TAGS.collections]
   });
 
-  return res.body.collections.items.map(item => readFragment(collectionFragment, item));
+  return res.body.collections.items.map((item) => readFragment(collectionFragment, item));
 }
 
 export async function getProduct(handle: string) {
@@ -311,7 +312,7 @@ export async function getProducts({
     }
   });
 
-  return res.body.search.items.map(item => readFragment(searchResultFragment, item));
+  return res.body.search.items.map((item) => readFragment(searchResultFragment, item));
 }
 
 export async function authenticateCustomer(username: string, password: string) {
@@ -343,7 +344,9 @@ export async function getActiveCustomer() {
   return readFragment(activeCustomerFragment, res.body.activeCustomer);
 }
 
-export async function getCustomerOrders(options?: VariablesOf<typeof getCustomerOrdersQuery>['options']) {
+export async function getCustomerOrders(
+  options?: VariablesOf<typeof getCustomerOrdersQuery>['options']
+) {
   const res = await vendureFetch({
     query: getCustomerOrdersQuery,
     tags: [TAGS.customer],

@@ -1,8 +1,8 @@
+import { readFragment } from '@/gql/graphql';
+import { formatCurrency } from '@/lib/utils';
+import orderFragment from '@/lib/vendure/fragments/order';
 import { getCustomerOrders } from 'lib/vendure';
 import Link from 'next/link';
-import { formatCurrency } from '@/lib/utils';
-import { readFragment } from '@/gql/graphql';
-import orderFragment from '@/lib/vendure/fragments/order';
 
 function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString('en-US', {
@@ -38,7 +38,7 @@ export default async function OrdersPage() {
     return (
       <div className="py-12 text-center">
         <h1 className="mb-4 text-2xl font-bold text-gray-900">Order History</h1>
-        <p className="mb-8 text-gray-500">You haven't placed any orders yet.</p>
+        <p className="mb-8 text-gray-500">You haven&apos;t placed any orders yet.</p>
         <Link
           href="/"
           className="inline-flex items-center rounded-md border border-transparent bg-black px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none"

@@ -7,9 +7,8 @@ import FilterList from './filter';
 async function CollectionList() {
   const collections = await getCollections();
 
-
   // Create a map of collections by their id
-  const collectionMap = new Map(collections.map(collection => [collection.id, collection]));
+  const collectionMap = new Map(collections.map((collection) => [collection.id, collection]));
 
   // Sort collections based on parentId
   collections.sort((a, b) => {

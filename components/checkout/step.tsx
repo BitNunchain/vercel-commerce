@@ -12,7 +12,7 @@ export function CheckoutSteps() {
 
   return (
     <div className="relative">
-      <div className="absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 bg-blue-300"></div>
+      <div className="absolute top-1/2 left-0 h-1 w-full -translate-y-1/2 bg-blue-300"></div>
       <div className="flex items-center justify-between">
         {checkoutSteps.map((step) => {
           const stepPathname = `/checkout/${step.identifier}`;

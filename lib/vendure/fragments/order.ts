@@ -14,53 +14,56 @@ export const orderAddressFragment = graphql(`
   }
 `);
 
-export const orderFragment = graphql(`
-  fragment Order on Order {
-    id
-    code
-    state
-    active
-    createdAt
-    updatedAt
-    currencyCode
-    total
-    totalWithTax
-    subTotal
-    subTotalWithTax
-    shipping
-    shippingWithTax
-    totalQuantity
-    lines {
+export const orderFragment = graphql(
+  `
+    fragment Order on Order {
       id
-      quantity
-      linePrice
-      linePriceWithTax
-      unitPrice
-      unitPriceWithTax
-      productVariant {
+      code
+      state
+      active
+      createdAt
+      updatedAt
+      currencyCode
+      total
+      totalWithTax
+      subTotal
+      subTotalWithTax
+      shipping
+      shippingWithTax
+      totalQuantity
+      lines {
         id
-        name
-        sku
-        options {
-          code
+        quantity
+        linePrice
+        linePriceWithTax
+        unitPrice
+        unitPriceWithTax
+        productVariant {
+          id
           name
-          group {
+          sku
+          options {
             code
             name
+            group {
+              code
+              name
+            }
+          }
+          product {
+            ...product
           }
         }
-        product {
-          ...product
-        }
+      }
+      billingAddress {
+        ...OrderAddress
+      }
+      shippingAddress {
+        ...OrderAddress
       }
     }
-    billingAddress {
-      ...OrderAddress
-    }
-    shippingAddress {
-      ...OrderAddress
-    }
-  }
-`, [productFragment, orderAddressFragment]);
+  `,
+  [productFragment, orderAddressFragment]
+);
 
 export default orderFragment;

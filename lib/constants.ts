@@ -1,6 +1,4 @@
-export const AUTH_COOKIE_KEY = 'vendure-auth-token'
-
-
+export const AUTH_COOKIE_KEY = 'vendure-auth-token';
 
 export type SortFilterItem = {
   name: string;

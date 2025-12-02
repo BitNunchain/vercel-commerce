@@ -9,10 +9,13 @@ export const activeCustomerFragment = graphql(`
   }
 `);
 
-export const getActiveCustomerQuery = graphql(`
-  query getActiveCustomer {
-    activeCustomer {
-      ...active_customer
+export const getActiveCustomerQuery = graphql(
+  `
+    query getActiveCustomer {
+      activeCustomer {
+        ...active_customer
+      }
     }
-  }
-`, [activeCustomerFragment]);
+  `,
+  [activeCustomerFragment]
+);

@@ -64,7 +64,7 @@ export function CustomerSettingsForm({ customer }: CustomerSettingsFormProps) {
     <Form {...form}>
       <form
         action={(formData) => startTransaction(() => formAction(formData))}
-        className="space-y-6 max-w-md"
+        className="max-w-md space-y-6"
       >
         <FormField
           control={form.control}
@@ -95,16 +95,14 @@ export function CustomerSettingsForm({ customer }: CustomerSettingsFormProps) {
         />
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Email Address
-          </label>
-          <Input 
-            type="email" 
-            value={customer?.emailAddress || ''} 
-            disabled 
+          <label className="mb-2 block text-sm font-medium text-gray-700">Email Address</label>
+          <Input
+            type="email"
+            value={customer?.emailAddress || ''}
+            disabled
             className="bg-gray-50"
           />
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="mt-1 text-sm text-gray-500">
             Email address cannot be changed. Please contact support if you need to update this.
           </p>
         </div>

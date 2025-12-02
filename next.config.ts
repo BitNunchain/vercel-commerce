@@ -11,6 +11,10 @@ export default {
       {
         protocol: 'https',
         hostname: 'vercel-commerce.demo.vendure.io'
+      },
+      {
+        protocol: 'https',
+        hostname: 'vercel-commerce.vendure.io'
       }
     ]
   }

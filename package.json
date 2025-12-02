@@ -6,7 +6,9 @@
     "start": "next start",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
-    "test": "npm run prettier:check"
+    "test": "npm run prettier:check",
+    "typecheck": "tsc --noEmit",
+    "lint": "next lint"
   },
   "dependencies": {
     "@graphql-typed-document-node/core": "^3.2.0",
@@ -80,6 +82,8 @@
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^4.1.11",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "15.0.4"
   }
 }

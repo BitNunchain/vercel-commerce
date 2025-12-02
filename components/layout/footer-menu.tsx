@@ -32,11 +32,7 @@ export function FooterMenuItem({ item }: { item: ResultOf<typeof collectionFragm
   );
 }
 
-export default function FooterMenu({
-  menu
-}: {
-  menu: ResultOf<typeof collectionFragment>[];
-}) {
+export default function FooterMenu({ menu }: { menu: ResultOf<typeof collectionFragment>[] }) {
   if (!menu.length) return null;
 
   return (

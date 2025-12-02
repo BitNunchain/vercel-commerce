@@ -18,9 +18,7 @@ export default async function CheckoutLayout({ children }: PropsWithChildren) {
             {SITE_NAME}
           </div>
         </Link>
-          <div>
-              Support Actions
-          </div>
+        <div>Support Actions</div>
       </header>
       <div className="mt-20 grid grid-cols-[1fr_400px]">
         <div>{children}</div>

@@ -35,13 +35,13 @@ export default function FacetsFilterItem({
   }, [searchParams]);
 
   return (
-    <div className="max-w-[50%] md:max-w-[250px] shrink-0 grow">
+    <div className="max-w-[50%] shrink-0 grow md:max-w-[250px]">
       <h3 className="mb-2 block text-xs text-neutral-500 dark:text-neutral-400">{item.name}</h3>
       <div>
         <MultiSelect
           defaultValue={defaultValue}
           options={item.values
-            .map(valueFragment => readFragment(facetValueFragment, valueFragment))
+            .map((valueFragment) => readFragment(facetValueFragment, valueFragment))
             .filter(
               (itemValue) =>
                 collectionFacetValues.findIndex((facetValue) => facetValue.id === itemValue.id) > -1

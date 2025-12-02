@@ -4,7 +4,9 @@ import { createContext, useContext } from 'react';
 import { ResultOf } from 'gql.tada';
 import { collectionFragment } from '@/lib/vendure/queries/collection';
 
-const CollectionContext = createContext<ResultOf<typeof collectionFragment> | undefined | null>(undefined);
+const CollectionContext = createContext<ResultOf<typeof collectionFragment> | undefined | null>(
+  undefined
+);
 
 export function CollectionProvider({
   children,

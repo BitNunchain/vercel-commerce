@@ -10,14 +10,13 @@
     A Next.js 15 and App Router-ready ecommerce template
 </p>
 
-
 ## Demo & Deployment
 
 Demo available here [vercel-commerce.vendure.io](https://vercel-commerce.vendure.io)
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvendure-ecommerce%2Fvercel-commerce&env=COMPANY_NAME,TWITTER_CREATOR,TWITTER_SITE,SITE_NAME,VENDURE_API_ENDPOINT,VENDURE_INSTANCE&project-name=vendure-commerce&repository-name=nextjs-storefront)
 
-## Features 
+## Features
 
 - Next.js App Router
 - Optimized for SEO using Next.js's Metadata
@@ -49,3 +48,15 @@ npm run dev
 ```
 
 Your app should now be running on [localhost:3000](http://localhost:3000/).
+
+### Required environment variables
+
+- `VENDURE_API_ENDPOINT` – URL of your Vendure Shop API (e.g. Cloud Run URL)
+- `VENDURE_REVALIDATION_SECRET` – secret string used by the revalidation route
+
+### Useful scripts
+
+- `npm run typecheck` – TypeScript checks
+- `npm run lint` – ESLint (Next.js rules)
+- `npm run prettier` – Format files
+- `npm run prettier:check` – Verify formatting

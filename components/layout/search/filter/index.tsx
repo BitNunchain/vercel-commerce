@@ -6,7 +6,10 @@ import { ResultOf } from 'gql.tada';
 import { collectionFragment } from '@/lib/vendure/queries/collection';
 
 export type ListItem = SortFilterItem | PathFilterItem;
-export type PathFilterItem = Pick<ResultOf<typeof collectionFragment>, 'slug' | 'parentId' | 'name'>;
+export type PathFilterItem = Pick<
+  ResultOf<typeof collectionFragment>,
+  'slug' | 'parentId' | 'name'
+>;
 
 function FilterItemList({ list }: { list: ListItem[] }) {
   return (
