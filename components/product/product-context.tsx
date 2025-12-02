@@ -36,26 +36,25 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     })
   );
 
-  const updateOption = (name: string, value: string) => {
-    const newState = { [name]: value };
-    setOptimisticState(newState);
-    return { ...state, ...newState };
-  };
+  const value = useMemo(() => {
+    const updateOption = (name: string, value: string) => {
+      const newState = { [name]: value } as ProductState;
+      setOptimisticState(newState);
+      return { ...state, ...newState };
+    };
 
-  const updateImage = (index: string) => {
-    const newState = { image: index };
-    setOptimisticState(newState);
-    return { ...state, ...newState };
-  };
+    const updateImage = (index: string) => {
+      const newState = { image: index } as ProductState;
+      setOptimisticState(newState);
+      return { ...state, ...newState };
+    };
 
-  const value = useMemo(
-    () => ({
+    return {
       state,
       updateOption,
       updateImage
-    }),
-    [state]
-  );
+    };
+  }, [state, setOptimisticState]);
 
   return <ProductContext.Provider value={value}>{children}</ProductContext.Provider>;
 }

@@ -17,6 +17,7 @@ export function GridTileImage({
     position?: 'bottom' | 'center';
   };
 } & React.ComponentProps<typeof Image>) {
+  const { alt, ...rest } = props as React.ComponentProps<typeof Image>;
   return (
     <div
       className={clsx(
@@ -28,12 +29,13 @@ export function GridTileImage({
         }
       )}
     >
-      {props.src ? (
+      {rest.src ? (
         <Image
           className={clsx('relative h-full w-full object-cover', {
             'transition duration-300 ease-in-out group-hover:scale-105': isInteractive
           })}
-          {...props}
+          alt={alt ?? label?.title ?? ''}
+          {...rest}
         />
       ) : null}
       {label ? (

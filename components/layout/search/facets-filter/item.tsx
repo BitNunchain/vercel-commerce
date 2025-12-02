@@ -1,11 +1,11 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { MultiSelect } from '@/ui-components/multi-select';
-import { useMemo } from 'react';
-import { ResultOf } from 'gql.tada';
-import { facetFragment, facetValueFragment } from '@/lib/vendure/fragments/facet';
 import { readFragment } from '@/gql/graphql';
+import { facetFragment, facetValueFragment } from '@/lib/vendure/fragments/facet';
+import { MultiSelect } from '@/ui-components/multi-select';
+import { ResultOf } from 'gql.tada';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useMemo } from 'react';
 
 export default function FacetsFilterItem({
   item,
@@ -32,7 +32,7 @@ export default function FacetsFilterItem({
 
   const defaultValue = useMemo(() => {
     return searchParams.get(item.code)?.split(',') ?? [];
-  }, [searchParams]);
+  }, [searchParams, item.code]);
 
   return (
     <div className="max-w-[50%] shrink-0 grow md:max-w-[250px]">

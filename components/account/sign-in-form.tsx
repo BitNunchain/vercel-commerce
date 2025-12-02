@@ -1,22 +1,22 @@
 'use client';
 
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn, SignInState } from '@/components/account/actions';
+import { LoaderButton } from '@/components/loader-button';
+import { useToast } from '@/ui-components/hooks/use-toast';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
 } from '@/ui-components/ui/form';
 import { Input } from '@/ui-components/ui/input';
-import { LoaderButton } from '@/components/loader-button';
-import { signIn, SignInState } from '@/components/account/actions';
-import { useActionState, useEffect, useTransition } from 'react';
-import { useToast } from '@/ui-components/hooks/use-toast';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { useActionState, useEffect, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 const formSchema = z.object({
   username: z.string().min(1),
@@ -50,7 +50,7 @@ export function SignInForm() {
       });
       router.replace('/account');
     }
-  }, [state]);
+  }, [state, toast, router]);
 
   return (
     <Form {...form}>
