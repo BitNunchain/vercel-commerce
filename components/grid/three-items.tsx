@@ -47,9 +47,15 @@ async function ThreeItemGridItem({
 
 export async function ThreeItemGrid() {
   // Collections that start with `hidden-*` are hidden from the search page.
-  const homepageItems = await getCollectionProducts({
-    collection: 'electronics'
-  });
+  let homepageItems: ResultOf<typeof searchResultFragment>[] = [];
+  try {
+    homepageItems = await getCollectionProducts({
+      collection: 'electronics'
+    });
+  } catch (e) {
+    // Silently fail and render nothing on the homepage grid if API is unavailable
+    return null;
+  }
 
   if (!homepageItems[0] || !homepageItems[1] || !homepageItems[2]) return null;
 

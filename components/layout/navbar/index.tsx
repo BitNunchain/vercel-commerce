@@ -13,8 +13,13 @@ import { collectionFragment } from '@/lib/vendure/queries/collection';
 const { SITE_NAME } = process.env;
 
 export async function Navbar() {
-  const menu = await getMenu();
-  const activeCustomer = await getActiveCustomer();
+  const [menuRes, customerRes] = await Promise.allSettled([
+    getMenu(),
+    getActiveCustomer()
+  ]);
+
+  const menu = menuRes.status === 'fulfilled' ? menuRes.value : [];
+  const activeCustomer = customerRes.status === 'fulfilled' ? customerRes.value : null;
 
   return (
     <nav className="relative flex items-center justify-between p-4 lg:px-6">
