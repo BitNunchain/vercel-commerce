@@ -1,14 +1,23 @@
-import { getActiveChannel, getCollectionProducts } from 'lib/vendure';
-import Link from 'next/link';
-import { GridTileImage } from './grid/tile';
-import { getSearchResultPrice } from '../lib/utils';
 import { readFragment } from '@/gql/graphql';
 import searchResultFragment from '@/lib/vendure/fragments/search-result';
+import { getActiveChannel, getCollectionProducts } from 'lib/vendure';
+import Link from 'next/link';
+import { getSearchResultPrice } from '../lib/utils';
+import { GridTileImage } from './grid/tile';
 
 export async function Carousel() {
-  const activeChannel = await getActiveChannel();
-  // Collections that start with `hidden-*` are hidden from the search page.
-  const products = await getCollectionProducts({ collection: 'homepage-carousel' });
+  const [channelRes, productsRes] = await Promise.allSettled([
+    getActiveChannel(),
+    // Collections that start with `hidden-*` are hidden from the search page.
+    getCollectionProducts({ collection: 'homepage-carousel' })
+  ]);
+
+  if (channelRes.status !== 'fulfilled' || productsRes.status !== 'fulfilled') {
+    return null;
+  }
+
+  const activeChannel = channelRes.value;
+  const products = productsRes.value;
 
   if (!products?.length) return null;
 
