@@ -23,7 +23,7 @@
       },
       {
         "name": "gql.tada/ts-plugin",
-        "schema": "https://demo.vendure.io/shop-api",
+        "schema": "https://vendure-api-572691489926.us-central1.run.app/shop-api",
         "tadaOutputLocation": "./gql/graphql-env.d.ts"
       }
     ],
