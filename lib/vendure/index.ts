@@ -54,7 +54,7 @@ export async function vendureFetch<T, V extends Record<string, any> = Record<str
   variables?: V;
 }): Promise<{ status: number; body: T; headers: Headers } | never> {
   try {
-    const result = await fetch(endpoint, {
+    const requestInit = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -66,11 +66,19 @@ export async function vendureFetch<T, V extends Record<string, any> = Record<str
       }),
       cache,
       ...(tags && { next: { tags } })
-    });
+    } as RequestInit & { next?: { tags: string[] } };
+
+    const result = await fetch(endpoint, requestInit);
 
     const body = await result.json();
 
     if (body.errors) {
+      console.error('Vendure GraphQL error', {
+        endpoint,
+        status: result.status,
+        path: body.errors[0]?.path,
+        message: body.errors[0]?.message
+      });
       throw body.errors[0];
     }
 
@@ -80,7 +88,10 @@ export async function vendureFetch<T, V extends Record<string, any> = Record<str
       headers: result.headers
     };
   } catch (e) {
-    console.log({ e });
+    console.error('Vendure fetch failed', {
+      endpoint,
+      error: e instanceof Error ? e.message : String(e)
+    });
     if (isVendureError(e)) {
       throw {
         cause: e.cause?.toString() || 'unknown',
